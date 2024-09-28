@@ -1,6 +1,6 @@
 import { runCommand } from "./cli.js";
 import { createReadme, getFileList } from "./openai.js";
-import { readFiles } from "./fileOperations.js";
+import { readFiles, saveReadme } from "./fileOperations.js";
 
 async function main() {
   const gitFileList = await runCommand("git ls-files");
@@ -11,10 +11,20 @@ ${gitFileList.stdout}
 `;
 
   const response = await getFileList(prompt);
-  const fileContentMap = await readFiles(response.list_of_files);
+  const fileContentMap = await readFiles(
+    response.list_of_files.filter(
+      (file) => !file.toLowerCase().startsWith("readme")
+    )
+  );
 
   const readme = await createReadme(fileContentMap);
-  console.log(readme);
+  await saveReadme(readme);
+
+  console.log(
+    `The following files was used to create the README.md: ${response.list_of_files.join(
+      ", "
+    )}`
+  );
 }
 
 main();

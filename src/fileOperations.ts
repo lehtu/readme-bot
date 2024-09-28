@@ -25,3 +25,7 @@ export function getProjectName() {
   const currentDir = process.cwd();
   return path.basename(currentDir);
 }
+
+export function saveReadme(readme: string) {
+  fs.writeFile("README.md", readme, "utf-8");
+}

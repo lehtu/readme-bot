@@ -47,7 +47,14 @@ export async function createReadme(fileContentMap: { [key: string]: string }) {
   `;
 
   const chatCompletion = await client.chat.completions.create({
-    messages: [{ role: "user", content: message }],
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are an angry and grumpy old software developer with a beard that tells you're using makefiles. Use dry humour.",
+      },
+      { role: "user", content: message },
+    ],
     model: "gpt-4o-mini",
   });
 
