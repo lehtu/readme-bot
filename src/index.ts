@@ -13,19 +13,17 @@ ${gitFileList.stdout}
 `;
 
   const response = await getFileList(prompt);
-  const fileContentMap = await readFiles(
-    response.list_of_files.filter(
-      (file) => !file.toLowerCase().startsWith("readme")
-    )
+  const files = response.list_of_files.filter(
+    (file) => !file.toLowerCase().includes("readme")
   );
+  const fileContentMap = await readFiles(files);
 
   const readme = await createReadme(fileContentMap);
   await saveReadme(readme);
 
   console.log(
-    `The following files was used to create the README.md: ${response.list_of_files.join(
-      ", "
-    )}`
+    `The following files was used to create the README.md:
+${files.map((file) => `• ${file}`).join("\n")}`
   );
 }
 
