@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 import { getEnv } from "./env.js";
 import { getProjectName } from "./fileOperations.js";
+import { readmeUserPrompt, readmeSystemPrompt } from "./prompts.js";
 
 const client = new OpenAI({
   apiKey: getEnv("OPENAI_API_KEY"),
@@ -41,22 +42,19 @@ export async function getFileList(
 }
 
 export async function createReadme(fileContentMap: { [key: string]: string }) {
-  const message = `
-Create a good readme for a project called ${getProjectName()} based on the following files:
-
-${formatFileContentMap(fileContentMap)}
-
-Include a few examples of the project and how to use it.
-  `.trim();
-
   const chatCompletion = await client.chat.completions.create({
     messages: [
       {
         role: "system",
-        content:
-          "You are an angry and grumpy old software developer with a beard that tells you're using makefiles. Use dry humour.",
+        content: readmeSystemPrompt(),
       },
-      { role: "user", content: message },
+      {
+        role: "user",
+        content: readmeUserPrompt(
+          getProjectName(),
+          formatFileContentMap(fileContentMap)
+        ),
+      },
     ],
     model: "gpt-4o-mini",
   });

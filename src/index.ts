@@ -3,17 +3,12 @@
 import { runCommand } from "./cli.js";
 import { createReadme, getFileList } from "./openai.js";
 import { readFiles, saveReadme } from "./fileOperations.js";
+import { fileListPrompt } from "./prompts.js";
 
 async function main() {
   const gitFileList = await runCommand("git ls-files");
-  const prompt = `
-Based on these files, which files would you like to open in order to write a good README.md?
-You should be able to write a few examples of the project and how to use it.
 
-${gitFileList.stdout}
-`;
-
-  const response = await getFileList(prompt);
+  const response = await getFileList(fileListPrompt(gitFileList.stdout));
   const files = response.list_of_files.filter(
     (file) => !file.toLowerCase().includes("readme")
   );
