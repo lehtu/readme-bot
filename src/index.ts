@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { runCommand } from "./cli.js";
 import { createReadme, getFileList } from "./openai.js";
 import { readFiles, saveReadme } from "./fileOperations.js";
