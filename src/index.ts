@@ -8,6 +8,7 @@ async function main() {
   const gitFileList = await runCommand("git ls-files");
   const prompt = `
 Based on these files, which files would you like to open in order to write a good README.md?
+You should be able to write a few examples of the project and how to use it.
 
 ${gitFileList.stdout}
 `;

@@ -41,10 +41,13 @@ export async function getFileList(
 }
 
 export async function createReadme(fileContentMap: { [key: string]: string }) {
-  const message = `Create a good readme for a project called ${getProjectName()} based on the following files:
+  const message = `
+Create a good readme for a project called ${getProjectName()} based on the following files:
 
-  ${formatFileContentMap(fileContentMap)}
-  `;
+${formatFileContentMap(fileContentMap)}
+
+Include a few examples of the project and how to use it.
+  `.trim();
 
   const chatCompletion = await client.chat.completions.create({
     messages: [
